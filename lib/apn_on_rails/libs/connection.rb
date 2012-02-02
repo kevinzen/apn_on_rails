@@ -52,12 +52,12 @@ module APN
         cert_param = options[:cert]
         
         # pass either a file or the name of the file.
-        case cert_param
-          when String
-            certificate = File.read(options[:cert])
-          when File
-            certificate = cert_param
-        end
+#        case cert_param
+#          when String
+#            certificate = File.read(options[:cert])
+#          when File
+        certificate = cert_param
+#        end
 
         context       = OpenSSL::SSL::SSLContext.new
         context.key   = OpenSSL::PKey::RSA.new(certificate)
