@@ -42,20 +42,31 @@ module APN
       end
       
       private
+      
       def open(options = {}, &block) # :nodoc:
         options = {:cert => configatron.apn.cert,
                    :passphrase => configatron.apn.passphrase,
                    :host => configatron.apn.host,
                    :port => configatron.apn.port}.merge(options)
-        #cert = File.read(options[:cert])
-        cert = options[:cert]
-        ctx = OpenSSL::SSL::SSLContext.new
-        ctx.key = OpenSSL::PKey::RSA.new(cert, options[:passphrase])
-        ctx.cert = OpenSSL::X509::Certificate.new(cert)
+
+        cert_param = options[:cert]
+        
+        # pass either a file or the name of the file.
+        case cert_param
+          when String
+            certificate = File.read(options[:cert])
+          when File
+            certificate = cert_param
+        end
+
+        context       = OpenSSL::SSL::SSLContext.new
+        context.key   = OpenSSL::PKey::RSA.new(certificate)
+        context.cert  = OpenSSL::X509::Certificate.new(certificate)
+#        ctx.key = OpenSSL::PKey::RSA.new(cert, options[:passphrase])
   
-        sock = TCPSocket.new(options[:host], options[:port])
-        ssl = OpenSSL::SSL::SSLSocket.new(sock, ctx)
-        ssl.sync = true
+        socket        = TCPSocket.new(aps_server, 2195)
+        ssl           = OpenSSL::SSL::SSLSocket.new(socket, context)
+        ssl.sync      = true
         ssl.connect
   
         yield ssl, sock if block_given?
