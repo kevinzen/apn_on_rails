@@ -62,6 +62,7 @@ module APN
         context       = OpenSSL::SSL::SSLContext.new
         context.key   = OpenSSL::PKey::RSA.new(certificate)
         context.cert  = OpenSSL::X509::Certificate.new(certificate)
+
 #        ctx.key = OpenSSL::PKey::RSA.new(cert, options[:passphrase])
   
         socket        = TCPSocket.new(aps_server, 2195)
