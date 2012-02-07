@@ -44,10 +44,14 @@ module APN
       private
       
       def open(options = {}, &block) # :nodoc:
-        options = {:cert => configatron.apn.cert,
+        options = {:cert => configatron.apn.dev_cert,
+                   :key => configatron.apn.dev_key,
                    :passphrase => configatron.apn.passphrase,
                    :host => configatron.apn.host,
                    :port => configatron.apn.port}.merge(options)
+
+#                   configatron.apn.dev_cert = File.join(RAILS_ROOT, 'config', 'cert.pem')
+#                   configatron.apn.dev_key = File.join(RAILS_ROOT, 'config', 'rsapkey.pem')
 
         cert_param = options[:cert]
         
@@ -59,11 +63,13 @@ module APN
         certificate = cert_param
 #        end
 
+        key = File.read(options[:key])
+        cert = File.read(options[:cert])
         aps_server = options[:host]
         
         context       = OpenSSL::SSL::SSLContext.new
-        context.key   = OpenSSL::PKey::RSA.new(certificate)
-        context.cert  = OpenSSL::X509::Certificate.new(certificate)
+        context.key   = OpenSSL::PKey::RSA.new(key)
+        context.cert  = OpenSSL::X509::Certificate.new(cert)
 
 #        ctx.key = OpenSSL::PKey::RSA.new(cert, options[:passphrase])
   
