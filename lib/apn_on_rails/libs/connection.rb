@@ -50,21 +50,23 @@ module APN
                    :host => configatron.apn.host,
                    :port => configatron.apn.port}.merge(options)
 
-#                   configatron.apn.dev_cert = File.join(RAILS_ROOT, 'config', 'cert.pem')
-#                   configatron.apn.dev_key = File.join(RAILS_ROOT, 'config', 'rsapkey.pem')
-
-        cert_param = options[:cert]
+#        cert_param = options[:cert]
         
         # pass either a file or the name of the file.
 #        case cert_param
 #          when String
 #            certificate = File.read(options[:cert])
 #          when File
-        certificate = cert_param
+#        certificate = cert_param
 #        end
 
-        key = File.read(options[:key])
-        cert = File.read(options[:cert])
+        # hard code for testing
+        key_file = File.join(RAILS_ROOT, 'config', 'rsapkey.pem')
+        key = File.read(key_file)
+
+        cert_file = File.join(RAILS_ROOT, 'config', 'cert.pem')
+        cert = File.read(cert_file)
+
         aps_server = options[:host]
         
         context       = OpenSSL::SSL::SSLContext.new
