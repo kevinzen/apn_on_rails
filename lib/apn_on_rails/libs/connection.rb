@@ -80,7 +80,7 @@ module APN
         ssl.sync      = true
         ssl.connect
   
-        yield ssl, sock if block_given?
+        yield ssl, socket if block_given?
   
         ssl.close
         sock.close
