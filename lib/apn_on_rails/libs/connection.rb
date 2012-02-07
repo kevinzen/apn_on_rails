@@ -59,6 +59,8 @@ module APN
         certificate = cert_param
 #        end
 
+        aps_server = options[:host]
+        
         context       = OpenSSL::SSL::SSLContext.new
         context.key   = OpenSSL::PKey::RSA.new(certificate)
         context.cert  = OpenSSL::X509::Certificate.new(certificate)
