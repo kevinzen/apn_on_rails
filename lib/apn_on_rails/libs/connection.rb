@@ -83,7 +83,7 @@ module APN
         yield ssl, socket if block_given?
   
         ssl.close
-        sock.close
+        socket.close
       end
       
     end
